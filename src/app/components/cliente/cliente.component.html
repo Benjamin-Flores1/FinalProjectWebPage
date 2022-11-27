@@ -1,0 +1,44 @@
+<div class="row">
+  <h1 class="text-center col-12" style="padding-top: 20px">
+    E-Commerce: Retail
+  </h1>
+</div>
+<!-- Agregar Filtro por Categoria y SubCategoria 
+  <div>
+  <select
+    name="filtro"
+    id="filtro"
+    class="btn btn-info col-5"
+    #filtro
+    style="font-size: 13pt; margin: 20px"
+    *ngFor="let items of data"
+  >
+    <option value=" ">Seleccionar</option>
+  </select>
+</div> -->
+<div style="margin: 60px">
+  <b>Tabla de Producto</b>
+  <table
+    datatable
+    [dtOptions]="dtOptions"
+    [dtTrigger]="dtTrigger"
+    class="table table-striped row-border hover"
+  >
+    <thead>
+      <tr>
+        <th>Cod_Producto</th>
+        <th>Producto</th>
+        <th>Cod_SubCategoria</th>
+        <th>Color</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let items of data">
+        <td>{{ items.Cod_Producto }}</td>
+        <td>{{ items.Producto }}</td>
+        <td>{{ items.Cod_SubCategoria }}</td>
+        <td>{{ items.Color }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

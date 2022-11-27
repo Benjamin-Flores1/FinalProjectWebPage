@@ -1,0 +1,247 @@
+<div class="row">
+  <h1 class="text-center col-12" style="padding-top: 20px">
+    E-Commerce: Retail
+  </h1>
+</div>
+<div class="col-md-12 mb-3">
+  <b
+    ><label for="signo" class="col-12" style="margin-left: 17%"
+      >Seleccione la tabla:</label
+    ></b
+  >
+  <select
+    name="tableName"
+    id="tableName"
+    class="btn btn-info col-5"
+    #tableName
+    style="font-size: 13pt; margin: 20px"
+    (change)="seleccionarTable(tableName)"
+  >
+    <option>Seleccionar</option>
+    <option value="categoria.json">Categoria</option>
+    <option value="subCategoria3.json">Sub-Categoria</option>
+    <option value="producto.json">Producto</option>
+    <option value="ingresosPorProducto.json">Ingresos Por Producto</option>
+    <!-- <option value="dbo_Mine.json">Mine</option>
+    <option value="dbo_FactMine.json">FactMine</option>
+    <option value="dbo_VentasInternet.json">Ventas-Internet</option> -->
+  </select>
+</div>
+<div style="margin: 60px">
+  <div class="col-md-12 mb-3" *ngIf="tableName.value == 'categoria.json'">
+    <b>Tabla de Categoria</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>Cod_Categoria</th>
+          <th>Nombre_Categoria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.Cod_Categoria }}</td>
+          <td>{{ items.Nombre_Categoria }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-12 mb-3" *ngIf="tableName.value == 'subCategoria3.json'">
+    <b>Tabla de Sub-Categorias</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>Cod_SubCategoria</th>
+          <th>SubCategoria</th>
+          <th>Cod_Categoria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.Cod_SubCategoria }}</td>
+          <td>{{ items.SubCategoria }}</td>
+          <td>{{ items.Cod_Categoria }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-12 mb-3" *ngIf="tableName.value == 'producto.json'">
+    <b>Tabla de Producto</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>Cod_Producto</th>
+          <th>Producto</th>
+          <th>Cod_SubCategoria</th>
+          <th>Color</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.Cod_Producto }}</td>
+          <td>{{ items.Producto }}</td>
+          <td>{{ items.Cod_SubCategoria }}</td>
+          <td>{{ items.Color }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    class="col-md-12 mb-3"
+    *ngIf="tableName.value == 'ingresosPorProducto.json'"
+  >
+    <b>Tabla de Ingresos Por Producto</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>Cod_Producto</th>
+          <th>PromedioIngresosNetos</th>
+          <th>TotalIngresosNetos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.Cod_Producto }}</td>
+          <td>{{ items.PromedioIngresosNetos }}</td>
+          <td>{{ items.TotalIngresosNetos }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <div
+    class="col-md-12 mb-3"
+    *ngIf="tableName.value == 'dbo_VentasInternet.json'"
+  >
+    <b>Tabla Ventas por Internet</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>Cod_Producto</th>
+          <th>Cod_Cliente</th>
+          <th>Cod_Territorio</th>
+          <th>NumeroOrden</th>
+          <th>Cantidad</th>
+          <th>PrecioUnitario</th>
+          <th>CostoUnitario</th>
+          <th>Impuesto</th>
+          <th>Flete</th>
+          <th>FechaOrden</th>
+          <th>FechaEnvio</th>
+          <th>FechaVencimiento</th>
+          <th>Cod_Promocion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.Cod_Producto }}</td>
+          <td>{{ items.Cod_Cliente }}</td>
+          <td>{{ items.Cod_Territorio }}</td>
+          <td>{{ items.NumeroOrden }}</td>
+          <td>{{ items.Cantidad }}</td>
+          <td>{{ items.PrecioUnitario }}</td>
+          <td>{{ items.CostoUnitario }}</td>
+          <td>{{ items.Impuesto }}</td>
+          <td>{{ items.Flete }}</td>
+          <td>{{ items.FechaOrden }}</td>
+          <td>{{ items.FechaEnvio }}</td>
+          <td>{{ items.FechaVencimiento }}</td>
+          <td>{{ items.Cod_Promocion }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-12 mb-3" *ngIf="tableName.value == 'dbo_FactMine.json'">
+    <b>Tabla FactMine</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>TruckID</th>
+          <th>ProjectID</th>
+          <th>OperatorID</th>
+          <th>TotalOreMined</th>
+          <th>TotalWasted</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.TruckID }}</td>
+          <td>{{ items.ProjectID }}</td>
+          <td>{{ items.OperatorID }}</td>
+          <td>{{ items.TotalOreMined }}</td>
+          <td>{{ items.TotalWasted }}</td>
+          <td>{{ items.Date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-12 mb-3" *ngIf="tableName.value == 'dbo_Mine.json'">
+    <b>Tabla Mine</b>
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+      class="table table-striped row-border hover"
+    >
+      <thead>
+        <tr>
+          <th>TruckID</th>
+          <th>Truck</th>
+          <th>ProjectID</th>
+          <th>Country</th>
+          <th>OperatorID</th>
+          <th>FirstName</th>
+          <th>LastName</th>
+          <th>Age</th>
+          <th>TotalOreMined</th>
+          <th>TotalWasted</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let items of data">
+          <td>{{ items.TruckID }}</td>
+          <td>{{ items.Truck }}</td>
+          <td>{{ items.ProjectID }}</td>
+          <td>{{ items.Country }}</td>
+          <td>{{ items.OperatorID }}</td>
+          <td>{{ items.FirstName }}</td>
+          <td>{{ items.LastName }}</td>
+          <td>{{ items.Age }}</td>
+          <td>{{ items.TotalOreMined }}</td>
+          <td>{{ items.TotalWasted }}</td>
+          <td>{{ items.Date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+</div>
