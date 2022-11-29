@@ -1,1 +1,38 @@
-<p>login works!</p>
+<img class="sally" src="..\..\..\..\assets\login.png" alt="" width="540px" height="540px">
+
+<div class="box">
+
+    <h1 class="titulo">Ingresar</h1>
+
+    <form [formGroup]="Form" class="formulario">
+
+        <div class="input-group rounded">
+            <img class="bg-image" width="35" height="35" src="assets/sms.png" width="24px" height="24px">
+            <input type="text" class="form-control" placeholder="Usuario" formControlName="username">
+        </div>
+
+        <div class="input-group rounded">
+            <img class="bg-image" width="35" height="35" src="assets/llave.png" width="24px" height="24px">
+            <input type="text" class="form-control" placeholder="Contraseña" formControlName="password">
+        </div>
+
+        <div *ngIf="error" class="Error">Login Error, please try again</div>
+
+    </form>
+
+    <p>Aqui puedes ingresar</p>
+
+    <div class="login">
+        <button class="boton1" (click)="login()">Login</button>
+    </div>
+
+
+    <div class="separador">
+        <img class="linea1" src="assets/linea.png" alt=""><h3>ó</h3><img class="linea1" src="assets/linea.png" alt="">
+    </div>
+
+    <div class="logingoogle">
+        <button class="transparent"><img (click)="loginGoogle()" src="assets/Google.png" alt="" width="303px" height="69px"></button>
+    </div>
+    
+</div>
