@@ -1,0 +1,40 @@
+<div style="padding: 25px">
+  <h4>Admin</h4>
+</div>
+<div class="row" style="padding: 25px">
+  <h4>Agregar un Producto:</h4>
+  <div class="col-auto">
+    <label for="productList" class="visually-hidden">Producto</label>
+    <select
+      name="productList"
+      id="prodList"
+      class="form-control"
+      #prodList
+      [(ngModel)]="productselected"
+    >
+      <option value="0">Seleccionar Producto</option>
+      <option *ngFor="let items of products">{{ items.Producto }}</option>
+    </select>
+  </div>
+  <form [formGroup]="Form" class="row g-3">
+    <div class="col-auto">
+      <label for="inputCant" class="visually-hidden">Cantidad</label>
+      <input
+        type="number"
+        class="form-control"
+        id="inputCant"
+        placeholder="Ingrese Cantidad"
+        formControlName="cantidad"
+      />
+    </div>
+    <div class="col-auto">
+      <button
+        (click)="postNewProduct()"
+        type="submit"
+        class="btn btn-primary mb-3"
+      >
+        Agregar al Stock
+      </button>
+    </div>
+  </form>
+</div>

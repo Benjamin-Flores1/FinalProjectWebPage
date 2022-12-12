@@ -1,0 +1,132 @@
+<div class="row">
+  <h1
+    class="text-center col-12"
+    style="
+      padding-top: 20px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    "
+  >
+    E-Commerce: Retail
+  </h1>
+</div>
+<!-- listas desplegables, filtro por Categoria y SubCategoria-->
+<p style="padding-left: 20px">
+  <a
+    class="btn btn-info"
+    data-bs-toggle="collapse"
+    href="#collapseExample"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+  >
+    Filtrar por:
+  </a>
+</p>
+<div
+  class="collapse"
+  id="collapseExample"
+  style="padding-left: 30px; padding-right: 30px"
+>
+  <div class="card card-body">
+    <div class="row" style="margin: 20px">
+      <div class="col-md-5">
+        <h6><b>Categoria:</b></h6>
+        <select
+          name="categoriaList"
+          id="categoList"
+          class="btn btn-info col-8"
+          #categoList
+          style="font-size: 13pt; margin: 20px"
+          [(ngModel)]="selected"
+          (change)="subCategoryFilter()"
+          (change)="categoryFilter()"
+        >
+          <option value="0">Seleccionar Categoria</option>
+          <option *ngFor="let items of dataCategoria">
+            {{ items.Categoria }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-5" *ngIf="selected >= '1'">
+        <h6><b>SubCategoria:</b></h6>
+        <select
+          name="subcategoryList"
+          id="subcatList"
+          class="btn btn-info col-6"
+          #subcatList
+          style="font-size: 13pt; margin: 20px"
+          [(ngModel)]="selected2"
+          (change)="subCategoryFilterTable()"
+        >
+          <option value="0">Seleccione Sub-Categoria</option>
+          <option *ngFor="let items of subCategoryFiltered">
+            {{ items }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-2" *ngIf="selected >= '1'">
+        <button
+          type="button"
+          class="btn btn-info"
+          style="margin: 20px"
+          (click)="resetTable()"
+        >
+          Mostrar Stock Completo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Tabla Stock, se muestra a la inicio y desaparece cuando se selecciona una Categoria -->
+<div style="margin: 60px" *ngIf="selected < '1'">
+  <h2><b>Productos:</b></h2>
+  <table
+    datatable
+    [dtOptions]="dtOptions"
+    [dtTrigger]="dtTrigger"
+    class="table table-striped row-border hover"
+  >
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoria</th>
+        <th>SubCategoria</th>
+        <th>Cod_Sucursal</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of productos[0]">
+        <td>{{ element.Producto }}</td>
+        <td>{{ element.Categoria }}</td>
+        <td>{{ element.SubCategoria }}</td>
+        <td>{{ element.Cod_Sucursal }}</td>
+        <td>{{ element.Cantidad }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- Tabla Stock Filtrada, se muestra cuando se filtra por Categoria y esta sin datatable -->
+<div style="margin: 60px" *ngIf="selected > '0'">
+  <h2><b>Productos Filtrados:</b></h2>
+  <table class="table table-striped row-border hover">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Categoria</th>
+        <th>SubCategoria</th>
+        <th>Cod_Sucursal</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of productosFiltrados[0]">
+        <td>{{ element.Producto }}</td>
+        <td>{{ element.Categoria }}</td>
+        <td>{{ element.SubCategoria }}</td>
+        <td>{{ element.Cod_Sucursal }}</td>
+        <td>{{ element.Cantidad }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
