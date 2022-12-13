@@ -31,31 +31,30 @@ export class ProveedorComponent implements OnDestroy, OnInit {
         console.log(this.products);
         for (let i = 0; i < this.products.length; i++) {
           const dataArr = new Set(this.products[i].Producto);
-          console.log(dataArr);
         }
-
         this.dtTrigger.next(this.products);
       });
   }
   // Enviamos el nuevo Producto al datalake;
   public postNewProduct(): Observable<any> {
     this.cantselected = String(this.Form.get('cantidad')?.value || '');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'x-ms-blob-type': 'BlockBlob',
-        'Content-Type': 'application/json',
-      }),
-    };
     var body = JSON.stringify({
       Producto: this.productselected,
       Cantidad: this.cantselected,
     });
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'x-ms-blob-type': 'BlockBlob',
+      }),
+    };
     console.log(body);
-    return this.http.put(
-      'https://datalakepracticev2.blob.core.windows.net/output/input.json?sp=rw&st=2022-12-12T15:54:19Z&se=2022-12-13T02:54:19Z&spr=https&sv=2021-06-08&sr=b&sig=8kci%2FDCVtt70BYSiKmPUf0hVUvUtY6f4lz6x1yQacxM%3D',
+    var httpput = this.http.put(
+      'https://datalakepracticev2.blob.core.windows.net/output/input.json?sp=rw&st=2022-12-13T13:42:43Z&se=2022-12-13T21:42:43Z&spr=https&sv=2021-06-08&sr=b&sig=zDR3xRZm6ofE68s59Dvl3tmyJCd4llLW3%2FqJk3%2FFf%2Bg%3D',
       body,
       httpOptions
     );
+    httpput.subscribe((data) => console.log(data));
+    return httpput;
   }
 
   ngOnInit(): void {
