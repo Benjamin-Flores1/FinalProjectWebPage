@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject, Observable } from 'rxjs';
+import { Product } from '../../models/producto';
+import { ToastrService } from 'ngx-toastr';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-cliente',
@@ -19,15 +22,26 @@ export class ClienteComponent implements OnInit, OnDestroy {
   productosFiltrados: Array<any>;
   productos2: Array<any>;
   categoryFiltered: Array<any>;
+  comprasFiltered: Array<any>;
+  pro: Product;
+  prod: any;
+  nume: number;
+  Form = new FormGroup({
+    cantidad: new FormControl(''),
+  });
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private toastr: ToastrService) {
     this.productos = [];
     this.productosFiltrados = [];
     this.productos2 = [];
     this.dataSubCategoria = [];
     this.subCategoryFiltered = [];
+    this.comprasFiltered = [];
     this.categoryFiltered = [];
+    this.pro = new Product();
+    this.nume = 0;
   }
+
   // Lista desplegable de Categoria
   // Hacemos un get y guardamos los valores en una variable tipo any que mostraremos en el select de html
   public categoryDropdown() {
@@ -39,6 +53,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
         this.dataCategoria = data;
       });
   }
+
   // Lista desplegable de SubCategoria
   // Hacemos un get y guardamos los valores en un Array de tipo any
   // Filtramos el array con un for loop
@@ -60,11 +75,12 @@ export class ClienteComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   // Tabla Stock
   public getStock(tableName: string) {
     this.http
       .get(
-        'https://grupo2desdepsdatalake.blob.core.windows.net/jsoncontainer/' +
+        'https://reop22datalake.blob.core.windows.net/jsoncontainer/' +
           tableName
       )
       .subscribe((data) => {
@@ -74,6 +90,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
         this.dtTrigger.next(this.productos);
       });
   }
+
   // Filtrar tabla Stock por Categoria
   public categoryFilter() {
     this.categoryFiltered = [];
@@ -85,6 +102,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
     }
     this.productosFiltrados.push(this.categoryFiltered);
   }
+
   // Filtrar tabla Stock por SubCategoria
   public subCategoryFilterTable() {
     this.categoryFiltered = [];
@@ -99,9 +117,90 @@ export class ClienteComponent implements OnInit, OnDestroy {
       this.productosFiltrados.push(this.categoryFiltered);
     }
   }
+
+  //Realizar compra, va en cascacda, si pasa la validacion de cantidad ingresada a comprar sea menor a igual a la cantidad del elemento seleccionado.
+  //llega a la compra, que modifica el json de Stock
+  //Por ultimo llega a el put de la compra que envia el Stock al datalake
+  public validarCompra() {
+    if (
+      parseInt(this.Form.get('cantidad')?.value || '') <=
+      parseInt(this.pro.Cantidad)
+    ) {
+      this.nume =
+        parseInt(this.pro.Cantidad) -
+        parseInt(this.Form.get('cantidad')?.value || '');
+      this.pro.Cantidad = String(this.nume);
+      this.comprar();
+    } else {
+      var toast = {
+        message: 'No hay suficiente Stock',
+      };
+      this.toastr.error(toast.message);
+    }
+  }
+  public comprar() {
+    let posicion = -1;
+    var compra = {
+      Producto: this.pro.Producto,
+      Cod_Producto: this.pro.Cod_Producto,
+      Categoria: this.pro.Categoria,
+      Cod_Categoria: this.pro.Cod_Categoria,
+      SubCategoria: this.pro.SubCategoria,
+      Cod_SubCategoria: this.pro.Cod_SubCategoria,
+      Cantidad: this.pro.Cantidad,
+      Cod_Sucursal: this.pro.Cod_Sucursal,
+    };
+    for (let i = 0; i < this.productos2[0][0].length; i++) {
+      if (
+        this.productos2[0][0][i].Cod_Producto === this.pro.Cod_Producto &&
+        this.productos2[0][0][i].Cod_Sucursal === this.pro.Cod_Sucursal
+      ) {
+        posicion = i;
+        console.log(posicion);
+      }
+      if (posicion > 1) {
+        this.productos2[0][0][posicion] = null;
+        this.productos2[0][0][posicion] = compra;
+      }
+    }
+    this.productos = [];
+    this.productos.push(this.productos2[0][0]);
+    console.log(this.productos);
+    this.updateStock();
+  }
+
   // Boton Mostrar Stock completo, recarga la pagina para mostrar el stock paginado
   public resetTable() {
     window.location.reload();
+  }
+
+  // Enviamos el Stock con la compra ya realizada, descontando la cantidad;
+  public updateStock(): Observable<any> {
+    var body = JSON.stringify(this.productos[0]);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'x-ms-blob-type': 'BlockBlob',
+      }),
+    };
+    var httpput = this.http.put(
+      'GENERAR SAS DEL ARCHIVO Stock.json',
+      body,
+      httpOptions
+    );
+    httpput.subscribe((data) => console.log(data));
+    var toast = {
+      message: 'Compra Exitosa!',
+    };
+    this.toastr.success(toast.message);
+    return httpput;
+  }
+
+  // Elegir producto desde la tabla
+  productSelect(prod: Product) {
+    var tprod = new Product();
+    Object.assign(tprod, prod);
+    this.pro = tprod;
+    console.log(this.pro);
   }
   // Todo lo que esta dentro de OnInit se corre al recargar o iniciar la pagina
   ngOnInit() {

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
@@ -19,7 +20,7 @@ export class ProveedorComponent implements OnDestroy, OnInit {
     cantidad: new FormControl(''),
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toastr: ToastrService) {}
   // Traemos los productos para mostrar en la lista desplegable;
   public productList() {
     this.http
@@ -35,11 +36,11 @@ export class ProveedorComponent implements OnDestroy, OnInit {
         this.dtTrigger.next(this.products);
       });
   }
-  // Enviamos el nuevo Producto al datalake;
+  // Enviamos el Cod_Producto y su Cantidad al datalake;
   public postNewProduct(): Observable<any> {
     this.cantselected = String(this.Form.get('cantidad')?.value || '');
     var body = JSON.stringify({
-      Producto: this.productselected,
+      Cod_Producto: this.productselected.substring(0, 3),
       Cantidad: this.cantselected,
     });
     const httpOptions = {
@@ -49,14 +50,18 @@ export class ProveedorComponent implements OnDestroy, OnInit {
     };
     console.log(body);
     var httpput = this.http.put(
-      'https://datalakepracticev2.blob.core.windows.net/output/input.json?sp=rw&st=2022-12-13T13:42:43Z&se=2022-12-13T21:42:43Z&spr=https&sv=2021-06-08&sr=b&sig=zDR3xRZm6ofE68s59Dvl3tmyJCd4llLW3%2FqJk3%2FFf%2Bg%3D',
+      'GENERAR SAS DEL ARCHIVO input.json',
       body,
       httpOptions
     );
     httpput.subscribe((data) => console.log(data));
+    var toast = {
+      message: this.cantselected + ' Productos agregados',
+      title: 'Por Sucursal',
+    };
+    this.toastr.success(toast.title, toast.message);
     return httpput;
   }
-
   ngOnInit(): void {
     this.productList();
     this.dtOptions = {

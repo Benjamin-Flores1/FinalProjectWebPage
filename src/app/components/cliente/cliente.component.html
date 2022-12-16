@@ -89,22 +89,103 @@
     <thead>
       <tr>
         <th>Producto</th>
+        <th>Cod_Producto</th>
         <th>Categoria</th>
         <th>SubCategoria</th>
         <th>Cod_Sucursal</th>
         <th>Cantidad</th>
+        <th>Compras</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let element of productos[0]">
         <td>{{ element.Producto }}</td>
+        <td>{{ element.Cod_Producto }}</td>
         <td>{{ element.Categoria }}</td>
         <td>{{ element.SubCategoria }}</td>
         <td>{{ element.Cod_Sucursal }}</td>
         <td>{{ element.Cantidad }}</td>
+        <td>
+          <button
+            class="btn btn-info"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="productSelect(element)"
+          >
+            Comprar
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Menú de Compra</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h5>¿Desea comprar este producto?</h5>
+        <table class="table table-striped row-border hover">
+          <thead>
+            <tr>
+              <th>Cod_Producto</th>
+              <th>Producto</th>
+              <th>Cod_Sucursal</th>
+              <th>Cantidad a Comprar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ this.pro.Cod_Producto }}</td>
+              <td>{{ this.pro.Producto }}</td>
+              <td>{{ this.pro.Cod_Sucursal }}</td>
+              <td>
+                <form [formGroup]="Form" class="row g-3">
+                  <div class="col-auto">
+                    <label for="inputCant" class="visually-hidden"
+                      >Cantidad</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="inputCant"
+                      placeholder="Ingrese Cantidad"
+                      formControlName="cantidad"
+                    />
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar Compra
+        </button>
+        <button type="button" class="btn btn-primary" (click)="validarCompra()">
+          Confirmar Compra
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- Tabla Stock Filtrada, se muestra cuando se filtra por Categoria y esta sin datatable -->
 <div style="margin: 60px" *ngIf="selected > '0'">
@@ -113,19 +194,33 @@
     <thead>
       <tr>
         <th>Producto</th>
+        <th>Cod_Producto</th>
         <th>Categoria</th>
         <th>SubCategoria</th>
         <th>Cod_Sucursal</th>
         <th>Cantidad</th>
+        <th>Compras</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let element of productosFiltrados[0]">
         <td>{{ element.Producto }}</td>
+        <td>{{ element.Cod_Producto }}</td>
         <td>{{ element.Categoria }}</td>
         <td>{{ element.SubCategoria }}</td>
         <td>{{ element.Cod_Sucursal }}</td>
         <td>{{ element.Cantidad }}</td>
+        <td>
+          <button
+            class="btn btn-info"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="productSelect(element)"
+          >
+            Comprar
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -13,7 +13,9 @@
       [(ngModel)]="productselected"
     >
       <option value="0">Seleccionar Producto</option>
-      <option *ngFor="let items of products">{{ items.Producto }}</option>
+      <option *ngFor="let items of products">
+        {{ items.Cod_Producto }} - {{ items.Producto }}
+      </option>
     </select>
   </div>
   <form [formGroup]="Form" class="row g-3">
@@ -37,4 +39,49 @@
       </button>
     </div>
   </form>
+  <p style="padding-left: 20px">
+    <a
+      class="btn btn-info"
+      data-bs-toggle="collapse"
+      href="#collapseExample"
+      role="button"
+      aria-expanded="false"
+      aria-controls="collapseExample"
+    >
+      Mostrar Informe de PowerBI:
+    </a>
+  </p>
+  <div
+    class="collapse"
+    id="collapseExample"
+    style="padding-left: 30px; padding-right: 30px"
+  >
+    <div class="card card-body">
+      <div class="row" style="margin: 20px">
+        <div class="col-md-12">
+          <h4 style="text-align: center">
+            <u><b>Informe BI</b></u>
+          </h4>
+          <div>
+            <!-- <iframe
+              title="InformeBI"
+              width="1300"
+              height="600"
+              src="https://app.powerbi.com/reportEmbed?reportId=b9a0bc05-8a1b-4f44-9fd9-97c65bf59d45&autoAuth=true&ctid=6669feab-699f-4cbc-b42f-12d2e634e7d2"
+              frameborder="0"
+              allowFullScreen="true"
+            ></iframe> -->
+            <iframe
+              title="INFORME FINAL2"
+              width="1300"
+              height="600"
+              src="https://app.powerbi.com/reportEmbed?reportId=a292886e-4f0f-4c3c-8957-61700dc99df3&autoAuth=true&ctid=6669feab-699f-4cbc-b42f-12d2e634e7d2"
+              frameborder="0"
+              allowFullScreen="true"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +16,11 @@ export class LoginComponent {
     username: new FormControl(''),
     password: new FormControl(''),
   });
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.userlogged = false;
@@ -47,8 +52,14 @@ export class LoginComponent {
         console.log(response);
         localStorage.setItem('Usuario', JSON.stringify(response));
         if (response) {
+          var toast = {
+            message: this.Form.get('username')?.value || '',
+            title: 'Bienvenido!',
+          };
+          this.toastr.success(toast.message, toast.title);
           this.router.navigateByUrl('/proveedor');
         } else {
+          this.toastr.error('Datos Incorrectos');
           console.log('Error');
           this.error = true;
         }
